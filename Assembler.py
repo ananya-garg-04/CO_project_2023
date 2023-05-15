@@ -2,6 +2,7 @@ file = input("Enter input file name: ")
 with open(file, "r") as f:
     text = f.readlines()
 
+    
 text = [line.strip() for line in text if line.strip()]
 
 l = len(text)
@@ -26,10 +27,8 @@ for i in range(len(addr)):
             exit(0)
         labels.append(addr[i].split()[0])
         addr[i] = addr[i].lstrip(addr[i].split()[0].lstrip())
-#print(addr)
-#print(labels)
 addr = addr+variables
-#l=len(addr)
+
 A = {'add': '00000', 'sub': '00001', 'mul': '00110',
      'xor': '01010', 'or': '01011', 'and': '01100'}
 B = {'mov': '00010', 'rs': '01000', 'ls': '01001'}
@@ -44,7 +43,6 @@ reg_encoding = {'R0': '000', 'R1': '001', 'R2': '010', 'R3': '011',
 
 def binary_code(ins):
     s = ins.split()
-    # print(s)
     if s[0] in A:
         if (s[1] or s[2] or s[3]) not in reg_encoding:
             print("SYNTAX ERROR: Typos in Register Name.")
@@ -135,15 +133,13 @@ def binary_code(ins):
         print("SYNTAX ERROR: Typos in Instruction Name.")
         exit(0)
 
-
 f1 = open('output.txt', 'w')
 for i in addr:
     line = binary_code(i)
     f1.write(line+'\n')
     if i == 'hlt':
         break
-#print(addr)
-#print(text)
+
 if text[l-1] != "hlt":
     print("SYNTAX ERROR: hlt not being used as last instruction.")
     exit(0)
