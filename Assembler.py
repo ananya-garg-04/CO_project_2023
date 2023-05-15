@@ -9,9 +9,9 @@ for i in range(l):
     else:
         text[i].strip("\\n")
 #print(text)
-if text[l-1]!="hlt":
-    print("SYNTAX ERROR: hlt not being used as last instruction.")
-    exit(0)
+# if text[l-1]!="hlt":
+#     print("SYNTAX ERROR: hlt not being used as last instruction.")
+#     # exit(0)
 variables=[]
 j=0
 while text[j].startswith('var')==1:
@@ -27,11 +27,14 @@ addr=text.copy()
 
 
 for i in range(len(addr)):
-    if addr[i].strip().endswith(':'):
-        if addr[i] in labels:
+    if addr[i].split()[0].endswith(':'):
+        if addr[i].split()[0] in labels:
             print("SYNTAX ERROR: Defining routine for a label multiple times is not permitted.")
             exit(0)
-        labels.append(addr[i])
+        labels.append(addr[i].split()[0])
+        addr[i]=addr[i].lstrip(addr[i].split()[0]+' ')
+print(addr)
+print(labels)
 for i in range(len(labels)):
     if labels[i] in addr:
         del(addr[addr.index(labels[i])])
@@ -140,6 +143,10 @@ for i in addr:
     f1.write(line+'\n')
     if i=='hlt':
         break
+
+if text[l-1]!="hlt":
+    print("SYNTAX ERROR: hlt not being used as last instruction.")
+    exit(0)
 if i!='hlt':
     print("SYNTAX ERROR: Missing hlt instruction.")
     exit(0)
