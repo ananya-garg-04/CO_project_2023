@@ -6,10 +6,6 @@ text = [line.strip() for line in text if line.strip()]
 
 l = len(text)
 
-# if text[l-1] != "hlt":
-#     print("SYNTAX ERROR: hlt not being used as last instruction.")
-#     exit(0)
-
 variables = []
 j = 0
 while text[j].startswith('var') == 1:
@@ -19,10 +15,8 @@ while text[j].startswith('var') == 1:
         exit(0)
     variables.append(var)
     del (text[j])
-    # j+=1
 labels = []
 addr = text.copy()
-
 
 for i in range(len(addr)):
     if addr[i].split()[0].endswith(':'):
@@ -32,14 +26,10 @@ for i in range(len(addr)):
             exit(0)
         labels.append(addr[i].split()[0])
         addr[i] = addr[i].lstrip(addr[i].split()[0].lstrip())
-print(addr)
-print(labels)
-# for i in range(len(labels)):
-#     if labels[i] in addr:
-#         del (addr[addr.index(labels[i])])
-# print(labels)
+#print(addr)
+#print(labels)
 addr = addr+variables
-# print(addr)
+#l=len(addr)
 A = {'add': '00000', 'sub': '00001', 'mul': '00110',
      'xor': '01010', 'or': '01011', 'and': '01100'}
 B = {'mov': '00010', 'rs': '01000', 'ls': '01001'}
@@ -76,7 +66,7 @@ def binary_code(ins):
                 print("SYNTAX ERROR: Typos in Register Name.")
                 exit(0)
             return (B[s[0]]+'0'+reg_encoding[s[1]]+imm)
-        elif not s[2].isalpha():
+        elif s[2].isdigit():
             print("SYNTAX ERROR: '"+s[2]+"' not defined.")
             exit(0)
         else:
@@ -152,7 +142,8 @@ for i in addr:
     f1.write(line+'\n')
     if i == 'hlt':
         break
-
+#print(addr)
+#print(text)
 if text[l-1] != "hlt":
     print("SYNTAX ERROR: hlt not being used as last instruction.")
     exit(0)
