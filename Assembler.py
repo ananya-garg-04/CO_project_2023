@@ -1,4 +1,5 @@
-with open("CO_project_2023/TestCase.txt", "r") as f:
+file = input("Enter input file name: ")
+with open(file, "r") as f:
     text = f.readlines()
 
 text = [line.strip() for line in text if line.strip()]
