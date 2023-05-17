@@ -1,8 +1,5 @@
-file = input("Enter input file name: ")
-with open(file, "r") as f:
-    text = f.readlines()
-
-    
+import sys
+text = sys.stdin.readlines()
 text = [line.strip() for line in text if line.strip()]
 
 l = len(text)
@@ -136,10 +133,9 @@ def binary_code(ins):
 f1 = open('output.txt', 'w')
 for i in addr:
     line = binary_code(i)
-    f1.write(line+'\n')
-    if i == 'hlt':
+    sys.stdout.write(line+'\n')
+    if i=='hlt':
         break
-
 if text[l-1] != "hlt":
     print("SYNTAX ERROR: hlt not being used as last instruction.")
     exit(0)
