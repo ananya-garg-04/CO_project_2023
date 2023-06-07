@@ -1,8 +1,9 @@
-#import sys
-#text = sys.stdin.readlines()
-f=open("test.txt","r")
-text=f.readlines()
-f.close()
+import sys
+text = sys.stdin.readlines()
+# f2 = open("CO_A_P1/SimpleSimulator/test1.txt","r")
+# f=open("test.txt","w")
+# text=.readlines()
+# f.close()
 text = [line.strip() for line in text if line.strip()]
 
 l = len(text)
@@ -32,18 +33,29 @@ def print_pc():
     binpc = str(binpc).lstrip("0b")
     len_binpc = len(binpc)
     len_binpc = 7 - len_binpc
-    print(len_binpc*"0"+binpc, end = " "*8)
+    s = str(len_binpc*"0")+str(binpc)+str(" "*8)
+    sys.stdout.write(s)
+    # sys.stdout.write(s)
 
-
+def print_flag():
+    s = str("")+str("0"*12)+str(V)+str(L)+str(G)+str(e)
+    sys.stdout.write(s)
 def print_reg_values():
+    
     for reg in reg_val:
+        if reg=="FLAGS":
+            print_flag()
+            return
         binval = (bin(reg_val[reg]))
         registervalue = (str(binval).lstrip("0"))
         registervalue = registervalue.lstrip("b")
         len_regval = len(str(registervalue))
         # print(len_regval)
         len_regval = 16 - len_regval
-        print(str(registervalue)+len_regval*"0",end = " ")
+        s = len_regval*"0"+str(registervalue)+" "
+        sys.stdout.write(s)
+        # sys.stdout.write(s)
+        
 while(halted == False):
     for i in range(l):
         line=text[i]
@@ -55,17 +67,23 @@ while(halted == False):
             reg3=line[13::]
             if ins=='00000':
                 reg_val[reg_encoding[reg1]]=reg_val[reg_encoding[reg2]]+reg_val[reg_encoding[reg3]]
+                if reg_val[reg_encoding[reg1]]<0 or reg_val[reg_encoding[reg1]]>127:
+                    V="1"
                 print_pc()
                 program_counter+=1
                 
                 print_reg_values()
             elif ins=='00001':
                 reg_val[reg_encoding[reg1]]=reg_val[reg_encoding[reg2]]-reg_val[reg_encoding[reg3]]
+                if reg_val[reg_encoding[reg1]]<0 or reg_val[reg_encoding[reg1]]>127:
+                    V="1"
                 print_pc()
                 program_counter+=1
                 print_reg_values()
             elif ins=='00110':
                 reg_val[reg_encoding[reg1]]=reg_val[reg_encoding[reg2]]*reg_val[reg_encoding[reg3]]
+                if reg_val[reg_encoding[reg1]]<0 or reg_val[reg_encoding[reg1]]>127:
+                    V="1"
                 print_pc()
                 program_counter+=1
                 print_reg_values()
@@ -117,6 +135,7 @@ while(halted == False):
             reg2=line[13::]
             if ins=='00011':
                 reg_val[reg_encoding[reg1]]=reg_val[reg_encoding[reg2]]
+                print_pc()
                 program_counter+=1
                 print_reg_values()
             elif ins=='00111':
@@ -175,32 +194,35 @@ while(halted == False):
                 val=bin(val)
                 val=val.lstrip('0')
                 val=val.lstrip('b')
+                diff = 16 - len(str(val))
+                val = diff*"0"+str(val)
                 memory[mem]=val
-                print_reg_values()
                 print_pc()
+                print_reg_values()
+                
                 program_counter+=1
         elif ins in E:
             unused=line[5:9] 
             mem=line[9::]
             mem=int(mem)
             if ins == "01111":
-                program_counter = int("0b"+mem)
+                program_counter = mem
                 print_reg_values()
                 print_pc()
 
             elif ins == "11100" :
                 if(L=="1"):
-                    program_counter = int("0b"+mem)
+                    program_counter = int("0b"+mem,2)
                     print_reg_values()
                     print_pc()
             elif ins == "11101":
                 if(G=="1"):
-                    program_counter = int("0b"+mem)
+                    program_counter = mem
                     print_reg_values()
                     print_pc()
             elif ins == "11111":
                 if(e=="1"):
-                    program_counter = int("0b"+mem)
+                    program_counter = int("0b"+mem,2)
                     print_reg_values()
                     print_pc()
 
@@ -208,8 +230,13 @@ while(halted == False):
             halted = True
             print_pc()
             print_reg_values()
+            # f.write("\n")
+            sys.stdout.write("\n")
             for i in memory:
-                print(i)
+                sys.stdout.write(str(i))
+            
+                # sys.stdout.write(i)
+                sys.stdout.write("\n")
             # print(memory)
             # for i in range(l):
 
@@ -218,6 +245,7 @@ while(halted == False):
             # for i in memory:
             #     # print(i)
             exit(0)
+        sys.stdout.write("\n")
     
 
 
